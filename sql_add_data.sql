@@ -1,6 +1,6 @@
 -- Добавляем 100 игроков
-INSERT INTO Players (username, email) 
-SELECT 
+INSERT INTO Players (username, email)
+SELECT
     CONCAT('Player', id), 
     CONCAT('player', id, '@example.com') 
 FROM (SELECT @id := @id + 1 AS id FROM (SELECT @id := 0) AS init, 
