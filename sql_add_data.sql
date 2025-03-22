@@ -1,26 +1,21 @@
--- Добавляем 100 игроков
+-- Вставка данных в таблицу Players
 INSERT INTO Players (username, email)
-SELECT
-    CONCAT('Player', id), 
-    CONCAT('player', id, '@example.com') 
-FROM (SELECT @id := @id + 1 AS id FROM (SELECT @id := 0) AS init, 
-      information_schema.tables LIMIT 100) AS t;
+VALUES
+    ('player1', 'player1@example.com'),
+    ('player2', 'player2@example.com'),
+    ('player3', 'player3@example.com');
 
--- Добавляем 50 игр
-INSERT INTO Games (title, genre, release_year) 
-SELECT 
-    CONCAT('Game', id), 
-    ELT(1 + (id % 5), 'RPG', 'Shooter', 'Adventure', 'Strategy', 'Sports'),
-    2000 + (id % 25)
-FROM (SELECT @id := @id + 1 AS id FROM (SELECT @id := 0) AS init, 
-      information_schema.tables LIMIT 50) AS t;
+-- Вставка данных в таблицу Games
+INSERT INTO Games (title, genre, release_year)
+VALUES
+    ('Game 1', 'Adventure', 2022),
+    ('Game 2', 'Action', 2021),
+    ('Game 3', 'RPG', 2020);
 
--- Добавляем 500 игровых сессий случайным образом
-INSERT INTO Sessions (player_id, game_id, start_time, end_time)
-SELECT 
-    FLOOR(1 + RAND() * 100),  -- случайный игрок
-    FLOOR(1 + RAND() * 50),   -- случайная игра
-    NOW() - INTERVAL FLOOR(RAND() * 365) DAY - INTERVAL FLOOR(RAND() * 24) HOUR,  -- случайная дата за последний год
-    NOW() - INTERVAL FLOOR(RAND() * 365) DAY - INTERVAL FLOOR(RAND() * 24) HOUR + INTERVAL FLOOR(30 + RAND() * 120) MINUTE  -- случайная продолжительность от 30 до 150 минут
-FROM (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10) AS t1,
-     (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10) AS t2;
+-- Вставка данных в таблицу Sessions
+INSERT INTO Sessions (player_id, game_id, duration_minutes)
+VALUES
+    (1, 1, 120), -- Player 1 играет в Game 1, 120 минут
+    (1, 2, 45),  -- Player 1 играет в Game 2, 45 минут
+    (2, 3, 90),  -- Player 2 играет в Game 3, 90 минут
+    (3, 1, 60);  -- Player 3 играет в Game 1, 60 минут
